@@ -23,6 +23,7 @@ import { TOrgServiceFactory } from "../org/org-service";
 import { TProjectMembershipDALFactory } from "../project-membership/project-membership-dal";
 import { addMembersToProject } from "../project-membership/project-membership-fns";
 import { TProjectUserMembershipRoleDALFactory } from "../project-membership/project-user-membership-role-dal";
+import { TProjectRoleDALFactory } from "../project-role/project-role-dal";
 import { SmtpTemplates, TSmtpService } from "../smtp/smtp-service";
 import { TUserDALFactory } from "../user/user-dal";
 import { TAuthDALFactory } from "./auth-dal";
@@ -52,6 +53,7 @@ type TAuthSignupDep = {
   licenseService: Pick<TLicenseServiceFactory, "updateSubscriptionOrgMemberCount">;
   projectMembershipDAL: Pick<TProjectMembershipDALFactory, "find" | "transaction" | "insertMany">;
   projectUserMembershipRoleDAL: Pick<TProjectUserMembershipRoleDALFactory, "insertMany">;
+  projectRoleDAL: Pick<TProjectRoleDALFactory, "findOne">;
 };
 
 export type TAuthSignupFactory = ReturnType<typeof authSignupServiceFactory>;
@@ -66,6 +68,7 @@ export const authSignupServiceFactory = ({
   tokenService,
   smtpService,
   orgService,
+  projectRoleDAL,
   orgDAL,
   projectMembershipDAL,
   projectUserMembershipRoleDAL,
@@ -390,6 +393,7 @@ export const authSignupServiceFactory = ({
             projectMembershipDAL,
             projectKeyDAL,
             userGroupMembershipDAL,
+            projectRoleDAL,
             projectBotDAL,
             projectUserMembershipRoleDAL,
             smtpService
@@ -398,7 +402,7 @@ export const authSignupServiceFactory = ({
               emails: [user.email!],
               usernames: [],
               projectId,
-              projectMembershipRole: metadataObj.payload.projectRoleSlug,
+              projectMembershipRoles: [metadataObj.payload.projectRoleSlug],
               sendEmails: false
             },
             {

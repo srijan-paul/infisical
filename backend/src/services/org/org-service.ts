@@ -40,6 +40,7 @@ import { TProjectKeyDALFactory } from "../project-key/project-key-dal";
 import { TProjectMembershipDALFactory } from "../project-membership/project-membership-dal";
 import { addMembersToProject } from "../project-membership/project-membership-fns";
 import { TProjectUserMembershipRoleDALFactory } from "../project-membership/project-user-membership-role-dal";
+import { TProjectRoleDALFactory } from "../project-role/project-role-dal";
 import { SmtpTemplates, TSmtpService } from "../smtp/smtp-service";
 import { TUserDALFactory } from "../user/user-dal";
 import { TIncidentContactsDALFactory } from "./incident-contacts-dal";
@@ -86,6 +87,7 @@ type TOrgServiceFactoryDep = {
   projectUserAdditionalPrivilegeDAL: Pick<TProjectUserAdditionalPrivilegeDALFactory, "delete">;
   userGroupMembershipDAL: Pick<TUserGroupMembershipDALFactory, "findUserGroupMembershipsInProject">;
   projectBotDAL: Pick<TProjectBotDALFactory, "findOne">;
+  projectRoleDAL: Pick<TProjectRoleDALFactory, "findOne">;
   projectUserMembershipRoleDAL: Pick<TProjectUserMembershipRoleDALFactory, "insertMany">;
 };
 
@@ -108,6 +110,7 @@ export const orgServiceFactory = ({
   tokenService,
   orgBotDAL,
   licenseService,
+  projectRoleDAL,
   samlConfigDAL,
   userGroupMembershipDAL,
   projectBotDAL,
@@ -557,6 +560,7 @@ export const orgServiceFactory = ({
                   projectMembershipDAL,
                   projectKeyDAL,
                   userGroupMembershipDAL,
+                  projectRoleDAL,
                   projectBotDAL,
                   projectUserMembershipRoleDAL,
                   smtpService
@@ -565,7 +569,7 @@ export const orgServiceFactory = ({
                     emails: [inviteeEmail],
                     usernames: [],
                     projectId,
-                    projectMembershipRole: projectRoleSlug,
+                    projectMembershipRoles: [projectRoleSlug],
                     sendEmails: false
                   },
                   {
