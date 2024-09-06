@@ -44,7 +44,7 @@ type TProjectMembershipServiceFactoryDep = {
   projectUserMembershipRoleDAL: Pick<TProjectUserMembershipRoleDALFactory, "insertMany" | "find" | "delete">;
   userDAL: Pick<TUserDALFactory, "findById" | "findOne" | "findUserByProjectMembershipId" | "find">;
   userGroupMembershipDAL: TUserGroupMembershipDALFactory;
-  projectRoleDAL: Pick<TProjectRoleDALFactory, "find">;
+  projectRoleDAL: Pick<TProjectRoleDALFactory, "find" | "findOne">;
   orgDAL: Pick<TOrgDALFactory, "findMembership" | "findOrgMembersByUsername">;
   projectDAL: Pick<TProjectDALFactory, "findById" | "findProjectGhostUser" | "transaction" | "findProjectById">;
   projectKeyDAL: Pick<TProjectKeyDALFactory, "findLatestProjectKey" | "delete" | "insertMany">;
@@ -222,6 +222,7 @@ export const projectMembershipServiceFactory = ({
     actorOrgId,
     emails,
     usernames,
+    roleSlugs,
     sendEmails = true
   }: TAddUsersToWorkspaceNonE2EEDTO) => {
     const project = await projectDAL.findById(projectId);
@@ -248,12 +249,13 @@ export const projectMembershipServiceFactory = ({
       userGroupMembershipDAL,
       projectBotDAL,
       projectUserMembershipRoleDAL,
+      projectRoleDAL,
       smtpService
     }).addMembersToNonE2EEProject({
       emails,
       usernames,
       projectId,
-      projectMembershipRole: ProjectMembershipRole.Member,
+      projectMembershipRoles: roleSlugs || [ProjectMembershipRole.Member],
       sendEmails
     });
 
