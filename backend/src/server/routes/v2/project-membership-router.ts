@@ -26,7 +26,8 @@ export const registerProjectMembershipRouter = async (server: FastifyZodProvider
       }),
       body: z.object({
         emails: z.string().email().array().default([]).describe(PROJECT_USERS.INVITE_MEMBER.emails),
-        usernames: z.string().array().default([]).describe(PROJECT_USERS.INVITE_MEMBER.usernames)
+        usernames: z.string().array().default([]).describe(PROJECT_USERS.INVITE_MEMBER.usernames),
+        roleSlugs: z.string().array().optional().describe(PROJECT_USERS.INVITE_MEMBER.roleSlugs)
       }),
       response: {
         200: z.object({
@@ -43,7 +44,8 @@ export const registerProjectMembershipRouter = async (server: FastifyZodProvider
         actorOrgId: req.permission.orgId,
         actor: req.permission.type,
         emails: req.body.emails,
-        usernames: req.body.usernames
+        usernames: req.body.usernames,
+        roleSlugs: req.body.roleSlugs
       });
 
       await server.services.auditLog.createAuditLog({
