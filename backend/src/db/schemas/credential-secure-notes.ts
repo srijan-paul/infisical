@@ -15,7 +15,9 @@ export const CredentialSecureNotesSchema = z.object({
   orgId: z.string().uuid(),
   encryptedNote: z.string(),
   encryptedNoteIV: z.string(),
-  encryptedNoteTag: z.string()
+  encryptedNoteTag: z.string(),
+  createdAt: z.date(),
+  updatedAt: z.date()
 });
 
 export type TCredentialSecureNotes = z.infer<typeof CredentialSecureNotesSchema>;

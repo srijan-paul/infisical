@@ -1,9 +1,9 @@
 import { z } from "zod";
 
+import { logger } from "@app/lib/logger";
 import { verifyAuth } from "@app/server/plugins/auth/verify-auth";
 import { AuthMode } from "@app/services/auth/auth-type";
 import { CredentialKind } from "@app/services/user-credentials/credentials-dal";
-import { logger } from "@app/lib/logger";
 
 const zodCredentialSchema = z.intersection(
   z.object({
