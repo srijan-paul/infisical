@@ -37,6 +37,7 @@ function CredentialsView(
           type="submit"
           leftIcon={<FontAwesomeIcon icon={faPlus} />}
           onClick={() => {
+						// we're now adding a credential, not editing one.
             setCredentialToEdit(undefined);
             handlePopUpOpen("credential");
           }}
